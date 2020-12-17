@@ -1,0 +1,377 @@
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts-more.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts-zh_CN.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/map.js"></script>
+<script src="https://data.jianshukeji.com/jsonp?filename=geochina/guizhou/guiyang.json&callback=?"></script>
+<div class="col-md-9">
+    <div id="container" style="height: 800px; width: 880px;"></div>
+</div>
+<div class="col-md-3">
+    <div class="databox databox-vertical databox-xxxlg radius-bordered databox-shadowed" style="margin-top: 60px;margin-left: 10px;height: 160px;">
+        <div class="databox-bottom no-padding bg-sky" style="height: 160px;">
+            <div class="databox-row row-3 bg-yellow padding-5 text-align-center">
+                <span class="databox-number" style="font-size:23px;color: #99433e">线路得分<i class="wi wi-day-cloudy"></i></span>
+            </div>
+            <p id="marker1"></p>
+
+        </div>
+    </div>
+    <div class="databox databox-vertical databox-xxxlg radius-bordered databox-shadowed" style="margin-top: 30px;margin-left: 10px;height: 160px;">
+        <div class="databox-bottom no-padding bg-sky" style="height: 160px;">
+            <div class="databox-row row-3 bg-yellow padding-5 text-align-center">
+                <span class="databox-number" style="font-size:23px;color: #99433e">线路告警<i class="wi wi-day-cloudy"></i></span>
+            </div>
+            <p id="marker2"></p>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+var cc=null;
+//一号线起点
+var x=358;
+//一号线起点
+var y=-965;
+//点移动速度
+var speed=10;
+    $(document).ready(function () {
+        var vd=[{name:"一号线",score:Math.round(Math.random()*100)},
+            {name:"二号线",score:Math.round(Math.random()*100)},
+            {name:"三号线",score:Math.round(Math.random()*100)}];
+        for(var i=0;i<vd.length;i++){
+            $("#marker1").append("<div style='height: 40px' class='databox-row row-1 padding-5 padding-left-30 text-align-left bordered-bottom bordered-whitesmoke'><div class='databox-cell cell-8'><span class='databox-title no-margin'>"+vd[i].name+"</span></div><div class='databox-cell cell-4'><span class='databox-number'>"+vd[i].score+"分  <i class='wi wi-day-cloudy'></i></span></div></div>");
+        }
+
+
+
+        for(var i=0;i<vd.length;i++){
+            $("#marker2").append("<div style='height: 40px' class='databox-row row-1 padding-5 padding-left-30 text-align-left bordered-bottom bordered-whitesmoke'><div class='databox-cell cell-8'><span class='databox-title no-margin'>"+vd[i].name+"</span></div><div class='databox-cell cell-4'><span class='databox-number'>"+vd[i].score+"分  <i class='wi wi-day-cloudy'></i></span></div></div>");
+        }
+
+
+
+        drawSubwayImage();
+    });
+
+
+
+
+
+    setInterval(function () {
+        if(x>=358&&x<=595&&y==(-965)){
+            x=x+speed;
+        }else if(x>=595&&y>=(-965)&&y<=-925){
+            y=y+speed;
+        }else{
+            x=358;
+            y=-965;
+        }
+console.log(x,y);
+        cc.series[10].update({
+            "color":getRandomColor(),
+            "marker": {
+                "lineColor": getRandomColor()
+            },
+            "data": [{
+                "name": "",
+                "x": x,
+                "y": y
+            }]
+        });
+    },800);
+    function drawSubwayImage() {
+        cc=Highcharts.mapChart('container',{
+        //cc=$('#container').highcharts('Map', {
+            chart: {
+                plotBorderWidth: 1,
+                plotBackgroundColor: '#dfbea5',
+                ignoreHiddenSeries: false
+            },
+            title: {
+                text: '贵阳地铁线路图'
+            },
+            subtitle: {
+                text: "2018-02-08"
+            },
+            xAxis: {
+                minPadding: -0.01
+            },
+            yAxis: {
+                minPadding: -0.01,
+                maxPadding: 0.01
+            },
+            plotOptions: {
+                series: {
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat: '{point.name}'
+                    }
+                }
+            },
+            legend: {
+                align: 'left',
+                backgroundColor: 'white',
+                floating: true,
+                layout: 'vertical',
+                verticalAlign: 'bottom',
+                x: 0,
+                y: -100
+            },
+            series: series,
+            credits: {
+                text: '',
+                href: ''
+            }
+        });
+
+    }
+var series = [
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#f4251e",
+        "name": "一号线",
+        "data": [
+            {
+                "name": "一号线",
+                "path": "M344,-965L595,-965L596,-925,677,-924,681,-671"
+            }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#7621c8",
+        "name": "S3号线",
+        "data": [
+            {
+                "name": "S3号线",
+                "path": "M408,-1128,409,-859,627,-860,627,-839,655,-801,764,-799,765,-744,836,-645,1000,-644"
+            }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#df8b1e",
+        "name": "2号线",
+        "data": [
+            {
+                "name": "2号线",
+                "path": "M511,-1129,511,-839,727,-838,726,-767,833,-766,833,-740,796,-707,806,-692"
+            }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#42d4f3",
+        "name": "4号线",
+        "data": [
+            {
+                "name": "4号线",
+                "path": "M564,-1213,563,-837,679,-766,726,-767,730,-504,728,-428"
+            }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#2c2ff4",
+        "name": "S2线",
+        "data": [
+            {
+                "name": "S2线",
+                "path": "M755,-1011,653,-1084,627,-1084,626,-897,449,-896,449,-834,267,-833,335,-767,337,-489,230,-345"
+            }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#2c2ff4",
+        "name": "S2线",
+        "data": [{
+            "name": "S2线",
+            "path": "M202,-413,334,-412,411,-380,481,-382,627,-539,627,-571,678,-573,681,-671,796,-670,839,-711,837,-828"
+        }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#dedf6c",
+        "name": "S1线",
+        "data": [{
+            "name": "S1线",
+            "path": "M755,-1011,801,-981L801,-942L783,-924,782,-888,709,-817,708,-765,654,-718,654,-672L619,-672L488,-584,299,-583,266,-613,207,-615"
+        }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#33df1a",
+        "name": "3号线",
+        "data": [{
+            "name": "3号线",
+            "path": "M886,-1053,886,-943,801,-942,708,-857,653,-858L653,-817L618,-767,618,-336"
+        }
+        ]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#615c5a",
+        "name": "环城线",
+        "data": [{
+            "name": "环城线",
+            "path": "M528,-1093,458,-964,456,-800,381,-754,239,-545,272,-505,382,-547,550,-461L675,-461L743,-505,828,-636,836,-645,849,-710,846,-808,864,-968,828,-1012,709,-1010,598,-1090z"
+        }]
+    },
+    {
+        "type": "mapline",
+        "lineWidth": 5,
+        "color": "#df746a",
+        "name": "G1线",
+        "data": [{
+            "name": "G1线",
+            "path": "M0,-836,267,-833,266,-600,296,-573,266,-538L266,-381L318,-382,319,-347"
+        }]
+    }
+    ,
+    {
+        "type": "mappoint",
+        "name": "动点",
+        "color":"#261ec8",
+        "marker": {
+            "fillColor": "white",
+            "lineColor": "#49c819",
+            "lineWidth": 4,
+            "radius": 5
+        },
+        "data": [{
+            "name": "",
+            "x": 358,
+            "y": -965
+        }]
+    },
+    {
+        "type": "mappoint",
+        "name": "站点",
+        "marker": {
+            "fillColor": "white",
+            "lineColor": "black",
+            "lineWidth": 2,
+            "radius": 4
+        },
+        "data": [
+            {
+                "name": "窦关",
+                "x": 343,
+                "y": -965
+            }, {
+                "name": "贵阳北站",
+                "x": 620,
+                "y": -925
+            }, {
+                "name": "沈关",
+                "x": 512,
+                "y": -1129
+            }, {
+                "name": "东客站",
+                "x": 806,
+                "y": -692
+            }, {
+                "name": "李官",
+                "x": 408,
+                "y": -1128
+            }, {
+                "name": "和尚土",
+                "x": 1000,
+                "y": -644
+            }, {
+                "name": "金寨路",
+                "x": 564,
+                "y": -1180
+            }, {
+                "name": "下谷仲",
+                "x": 728,
+                "y": -428
+            }, {
+                "name": "贵阳东",
+                "x": 755,
+                "y": -1011
+            }, {
+                "name": "北甘街",
+                "x": 230,
+                "y": -345
+            }, {
+                "name": "马场河",
+                "x": 202,
+                "y": -413
+            }, {
+                "name": "鱼梁桥",
+                "x": 837,
+                "y": -828
+            }, {
+                "name": "贵阳东站",
+                "x": 755,
+                "y": -1011
+            }, {
+                "name": "皂角坝",
+                "x": 207,
+                "y": -615
+            }, {
+                "name": "三江",
+                "x": 886,
+                "y": -1053
+            }, {
+                "name": "青岩",
+                "x": 618,
+                "y": -336
+            }, {
+                "name": "龙井村",
+                "x": 0,
+                "y": -836
+            }, {
+                "name": "综合保税区",
+                "x": 319,
+                "y": -347
+            }]
+    }
+];
+
+function getRandomColor()
+{
+    var c = '#';
+    var cArray = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+    for(var i = 0; i < 6;i++)
+    {
+        var cIndex = Math.round(Math.random()*15);
+        c += cArray[cIndex];
+    }
+    return c;
+}
+</script>
+<script>
+    /*
+Highcharts JS v6.0.5 (2018-01-31)
+
+(c) 2009-2017 Torstein Honsi
+
+License: www.highcharts.com/license
+*/
+    (function(b){"object"===typeof module&&module.exports?module.exports=b:b(Highcharts)})(function(b){(function(a){a.createElement("link",{href:"https://fonts.googleapis.com/css?family\x3dSignika:400,700",rel:"stylesheet",type:"text/css"},null,document.getElementsByTagName("head")[0]);a.wrap(a.Chart.prototype,"getContainer",function(a){a.call(this);this.container.style.background="url(http://www.highcharts.com/samples/graphics/sand.png)"});a.theme={colors:"#f45b5b #8085e9 #8d4654 #7798BF #aaeeee #ff0066 #eeaaee #55BF3B #DF5353 #7798BF #aaeeee".split(" "),
+        chart:{backgroundColor:null,style:{fontFamily:"Signika, serif"}},title:{style:{color:"black",fontSize:"16px",fontWeight:"bold"}},subtitle:{style:{color:"black"}},tooltip:{borderWidth:0},legend:{itemStyle:{fontWeight:"bold",fontSize:"13px"}},xAxis:{labels:{style:{color:"#6e6e70"}}},yAxis:{labels:{style:{color:"#6e6e70"}}},plotOptions:{series:{shadow:!0},candlestick:{lineColor:"#404048"},map:{shadow:!1}},navigator:{xAxis:{gridLineColor:"#D0D0D8"}},rangeSelector:{buttonTheme:{fill:"white",stroke:"#C0C0C8",
+                "stroke-width":1,states:{select:{fill:"#D0D0D8"}}}},scrollbar:{trackBorderColor:"#C0C0C8"},background2:"#E0E0E8"};a.setOptions(a.theme)})(b)});
+
+</script>
+
+
+
+

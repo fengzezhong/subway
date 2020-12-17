@@ -1,0 +1,1941 @@
+<link rel="stylesheet" href="{{projcfg.appurl}}/static/externalImport/css/reset.css?v=1"> <!-- CSS reset -->
+<link rel="stylesheet" type="text/css" href="{{projcfg.appurl}}/static/externalImport/css/default.css?v=1">
+<link rel="stylesheet" href="{{projcfg.appurl}}/static/externalImport/css/style.css?v=2"> <!-- Resource style -->
+<script src="{{projcfg.appurl}}/static/externalImport/js/jquery.mobile.custom.min.js?v=1"></script>
+<script src="{{projcfg.appurl}}/static/externalImport/js/main.js?v=1"></script>
+<script src="{{projcfg.appurl}}/static/externalImport/js/modernizr.js?v=1"></script><!-- Modernizr -->
+<script src="{{projcfg.appurl}}/static/js/echart/v3.1.3/echarts.min.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts-more.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/solid-gauge.js"></script>
+<script src="{{projcfg.appurl}}/static/highcharts/highcharts-zh_CN.js"></script>
+<script src="{{projcfg.appurl}}/static/laydate/laydate.js?v=0.1"></script>
+<div class="row" style="margin-left: 23px;">
+
+    <div class="col-xs-5 col-md-5 text-left">
+
+        <label>时间选择</label>
+        <input id="queryDate" name="queryDate"  style="height: 34px;weight:150px " >
+        <label>线路选择</label>
+        <input class="easyui-combobox" value="线路选择" style="width: 130px;height:34px;" name="subway_id" id="subway_id"
+               data-options='data:[{id:"一号线",text:"一号线"}],
+           valueField: "id",
+           textField: "text",
+           panelWidth: 130,
+           panelHeight: "auto"'>
+    </div>
+    <div class="col-xs-7 col-md-7 text-left">
+        <div class="btn-group" style="margin-left: 0px">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="query('day');" aria-expanded="false">
+                查询 <i class="glyphicon glyphicon-search"></i>
+            </a>
+            <!--<ul class="dropdown-menu">
+                <li>
+                    <a href="javascript:query('day');">日</a>
+                </li>
+                <li>
+                    <a href="javascript:query('hour');">小时</a>
+                </li>
+            </ul>-->
+        </div>
+    </div>
+</div>
+<section class="cd-horizontal-timeline" style="margin-bottom: -40px">
+    <div class="timeline">
+        <div class="events-wrapper">
+            <div class="events">
+                <ol>
+                    <li><a href="#0" data-date="窦关">窦官</a></li>
+                    <li><a href="#0" data-date="下麦西站" class="selected">下麦西站</a></li>
+                    <li><a href="#0" data-date="老湾塘站">老湾塘站</a></li>
+                    <li><a href="#0" data-date="阅山湖公园站">阅山湖公园站</a></li>
+                    <li><a href="#0" data-date="林城西路站">林城西路站</a></li>
+                    <li><a href="#0" data-date="观山湖公园站">观山湖公园站</a></li>
+                    <li><a href="#0" data-date="国际生态会议中心站">国际生态会议中心站</a></li>
+                    <li><a href="#0" data-date="阳关站">阳关站</a></li>
+                    <li><a href="#0" data-date="新寨站">新寨站</a></li>
+                    <li><a href="#0" data-date="白鹭湖站">白鹭湖站</a></li>
+                    <li><a href="#0" data-date="贵阳北站">贵阳北站</a></li>
+                </ol>
+                <span class="filling-line" aria-hidden="true"></span>
+            </div> <!-- .events -->
+        </div> <!-- .events-wrapper -->
+
+        <ul class="cd-timeline-navigation">
+            <li><a href="#0" class="prev inactive">Prev</a></li>
+            <li><a href="#0" class="next">Next</a></li>
+        </ul> <!-- .cd-timeline-navigation -->
+    </div> <!-- .timeline -->
+
+    <div class="events-content">
+        <ol>
+            <li class="selected" data-date="1" id="showPanle">
+            </li>
+        </ol>
+    </div>
+</section>
+
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="widget" style="width: 310px;">
+            <div class="widget-header bordered-bottom bordered-primary">
+                <span class="widget-caption">站点信息雷达图</span>
+            </div>
+            <div class="widget-body" style="width:310px;height: 350px">
+                <div id="httpQuato" style="width:290px; height:190px; "></div>
+                <div id="generalQuato" style="width:280px; height:170px;" ></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="widget" style="width:520px;margin-left: 20px">
+            <div class="widget-header bordered-bottom bordered-sky">
+                <span class="widget-caption">http网络指标</span>
+            </div>
+            <div class="widget-body" style="width:520px;height: 350px">
+                    <div class="databox databox-lg databox-inverted radius-bordered databox-shadowed databox-graded databox-vertical" style="width: 495px;height: 300px;">
+                        <div class="databox-top no-padding" style="height:200px;">
+                            <div class="row">
+                                <div class="col-6-md">
+                                <div id="container-speed1" style="width: 250px; height: 200px; float: left"></div>
+                                </div>
+                                <div class="col-6-md">
+                                    <div id="container-speed2" style="width: 250px; height: 200px; float: left"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                            <div class="databox-bottom no-padding bordered-thick bordered-primary">
+                            <div class="databox-row">
+                                <div class="databox-cell cell-3 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="HTTP_DL_RATE"></label>Mbps</span>
+                                    <span class="databox-text sonic-silver  no-margin">http下载速率</span>
+                                </div>
+                                <div class="databox-cell cell-3 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="HTTP_RESP_SUCC_RATE"></label>%</span>
+                                    <span class="databox-text sonic-silver no-margin">http响应成功率</span>
+                                </div>
+                                <div class="databox-cell cell-3 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="HTTP_TOTAL_USER_CNT"></label>人</span>
+                                    <span class="databox-text sonic-silver no-margin">http用户数</span>
+                                </div>
+                                <div class="databox-cell cell-3 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="HTTP_TOTAL_FLOW"></label>MB</span>
+                                    <span class="databox-text sonic-silver no-margin">http流量</span>
+                                </div>
+                            </div>
+                            </div>
+
+                        <div class="databox-bottom no-padding bordered-thick bordered-blueberry">
+                            <div class="databox-row">
+                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="GENERAL_DL_RATE"></label>Mbps</span>
+                                    <span class="databox-text sonic-silver  no-margin">其他下载速率</span>
+                                </div>
+                                <div class="databox-cell cell-4 no-padding text-align-center bordered-right bordered-platinum">
+                                    <span class="databox-number lightcarbon no-margin"><label id="GENERAL_TOTAL_USER_CNT"></label>人</span>
+                                    <span class="databox-text sonic-silver no-margin">其他用户数</span>
+                                </div>
+                                <div class="databox-cell cell-4 no-padding text-align-center">
+                                    <span class="databox-number lightcarbon no-margin"><label id="GENERAL_TOTAL_FLOW"></label>MB</span>
+                                    <span class="databox-text sonic-silver no-margin">其他流量</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="widget" style="width: 300px;margin-left: 50px">
+            <div class="widget-header bordered-bottom bordered-sky">
+                <span class="widget-caption">2G/4G接通掉线率</span>
+            </div>
+            <div class="widget-body" style="width:300px;height: 350px">
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -10px">
+                        <div id="container-2G-1" style="width: 140px; height: 150px; float: left"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container-2G-2" style="width: 140px; height: 150px; float: left"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -10px">
+                        <div id="container-4G-1" style="width: 140px; height: 150px; float: left"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container-4G-2" style="width: 140px; height: 150px; float: left"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="easyui-tabs" style="width: 600px;height:600px;padding:10px"
+             data-options="tabWidth:380,tabHeight:40,fit:true,border:true">
+            <div title="图表">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="buttons-preview" style="margin-left: 20px;margin-bottom: 10px;margin-top: 20px">
+                            <button class="btn shiny btn-palegreen  " type="button" onclick="switchQuota('dl_rate')">
+                                下载速率
+                            </button>
+                            <button class="btn shiny btn-azure " type="button" onclick="switchQuota('total_flow')">流量
+                            </button>
+                            <button class="btn shiny btn-sky " type="button" onclick="switchQuota('total_user_cnt')">
+                                用户数
+                            </button>
+                            <button class="btn shiny btn-blue" type="button"
+                                    onclick="switchQuota('http_resp_succ_rate')">页面响应成功率
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="margin-bottom: 10px;margin-top: 20px">
+                            <label>小区选择</label>
+                        <input id="cellList" class="easyui-combobox" data-options='formatter:formatItem' style="height: 35px;width: 300px;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding:10px">
+                    <div class="col-md-6">
+                        <div id="canvasDivWeek1"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="canvasDivDay1"></div>
+                    </div>
+                </div>
+            </div>
+            <div title="站点信息表格" style="padding:10px">
+                <table id="siteInfoTable" style="margin-top: 10px"></table>
+            </div>
+            <div title="小区信息表格" style="padding:10px">
+                <table id="cellInfoTable" style="margin-top: 10px"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--核心响应函数-->
+<script>
+
+    var currSite="下麦西站";
+
+
+    var cellLineData={};
+    var allCelData={};
+
+
+
+    var allDate=new Object();
+    var selectCellArr=[];
+
+var num=0;
+    function formatItem(row) {
+        if(num==17)
+            num=0;
+        //下拉列表类型选择
+        var a = ["label label-default",
+            "label label-primary",
+            "label label-info",
+            "label label-success",
+            "label label-danger",
+            "label label-warning",
+            "label label-sky",
+            "label label-blueberry",
+            "label label-yellow",
+            "label label-darkorange",
+            "label label-magenta",
+            "label label-purple",
+            "label label-maroon",
+            "label label-darkpink",
+            "label label-pink",
+            "label label-azure",
+            "label label-orange"];
+        var n = Math.floor(Math.random() * 17);
+        var s = '<span class="' + a[num++] + '">' + row.CELL_NAME + '</span>';
+        return s;
+    }
+    var currNetSelect='dl_rate';
+
+    $('#cellList').combobox({
+        url:'{{projcfg.appurl}}/api/subway/subway_router/getCell?site='+currSite,
+        method:'get',
+        valueField:'ECI',
+        textField:'CELL_NAME',
+        multiple:true,
+        onSelect:function (select) {
+            selectCellArr.push(select.CELL_NAME);
+            var netType=['HTTP_DL_RATE','HTTP_RESP_SUCC_RATE','HTTP_TOTAL_FLOW','HTTP_TOTAL_USER_CNT'];
+            for(var g=0;g<netType.length;g++){
+                var singleArr=[];
+                var local=allCelData.suitLineData[netType[g]];
+                for(var i=0;i<local.length;i++){
+                    for(var j=0;j<selectCellArr.length;j++){
+                        if(local[i].name==selectCellArr[j]){
+                            singleArr.push(local[i]);
+                        }
+                    }
+                }
+
+                if(singleArr.length!=0){
+                    cellLineData.suitLineData[netType[g]]=singleArr;
+                }
+
+            }
+
+            switchQuota(currNetSelect);
+        },
+        onUnselect:function (unSelect) {
+            for(var i=0;i<selectCellArr.length;i++){
+                if(unSelect.CELL_NAME==selectCellArr[i])
+                selectCellArr.splice(i,1);
+            }
+            var netType=['HTTP_DL_RATE','HTTP_RESP_SUCC_RATE','HTTP_TOTAL_FLOW','HTTP_TOTAL_USER_CNT'];
+            for(var g=0;g<netType.length;g++){
+                var singleArr=[];
+                var local=allCelData.suitLineData[netType[g]];
+                for(var i=0;i<local.length;i++){
+                    for(var j=0;j<selectCellArr.length;j++){
+                        if(local[i].name==selectCellArr[j]){
+                            singleArr.push(local[i]);
+                        }
+                    }
+                }
+
+                if(singleArr.length!=0){
+                    cellLineData.suitLineData[netType[g]]=singleArr;
+                }
+
+            }
+            switchQuota('dl_rate');
+        }
+
+    });
+
+
+
+
+    var currentDate=new Date();
+    var lastDay=currentDate.getFullYear()+"-"+currentDate.getMonth()+1+"-"+currentDate.getDate()-1;
+    /**
+     * 页面加载执行默认条件查询与图形表格绘制
+     */
+
+    $(document).ready(function () {
+        currentDate=new Date();
+
+        currentDate=new Date(currentDate-86400000);
+
+        lastDay=currentDate.getFullYear()+"-"+(currentDate.getMonth()+1)+"-"+(currentDate.getDate());
+        $('#subway_id').combobox('setValue',"一号线");
+        var currHours=new Date().getHours()<10?"0"+new Date().getHours():new Date().getHours();
+
+        $('#queryDate').val(lastDay+" "+currHours+":00");
+
+
+        drawSiteTable(getViewData());
+        drawAreaTable(getViewData());
+        var datg=getViewData();
+        datg['station_name']='下麦西站';
+
+        getRemoteCellData(getViewData(),function (data) {
+            getRemoteData(datg, "hour", function (data) {
+                allDate=data;
+                switchQuota('dl_rate');
+                dataFormateDraw(data);
+
+            });
+        });
+    });
+
+
+
+
+
+    /**
+     * 点击查询执行条件查询绘制图形表格
+     * @param timeType
+     */
+    function query(timeType) {
+        currTimeType=timeType;
+        drawSiteTable(getViewData());
+        drawAreaTable(getViewData());
+        var datg=getViewData();
+        datg['station_name']='下麦西站';
+
+        getRemoteCellData(getViewData(),function (data) {
+            getRemoteData(datg, "hour", function (data) {
+                allDate=data;
+                switchQuota('dl_rate');
+                dataFormateDraw(data);
+
+            });
+        });
+
+    }
+
+    /**
+     * 获取当前页面参数数据
+     * @returns queryData: subway_id
+     */
+
+    function getViewData() {
+
+        var queryDate = $("#queryDate").val();
+        if(queryDate==""||queryDate==undefined||queryDate==null)
+            msgError("请选择正确的时间格式");
+        var subway_id = $('#subway_id').combobox('getValue');
+        var STATION_NAME=currSite;
+        var c=dayTimeTransf(new Date(queryDate));
+
+
+        var retData={queryData:c,subway_id:subway_id,station_name:STATION_NAME,dataType:'hour'};
+        return retData;
+    }
+
+    /**
+     * 获取远程数据
+     * @param viewData
+     * @param timeType
+     * @param cb
+     */
+    function getRemoteData(viewData, timeType, cb) {
+        viewData["timeType"] = timeType;
+        $.ajax({
+            url: "{{projcfg.appurl}}/api/subway/subway_router/",
+            data: viewData,
+            type: "get",
+            success: function (data) {
+                cb(data);
+            }
+        });
+    }
+
+    function getRemoteCellData(para,cb) {
+        $.ajax({
+            url: "{{projcfg.appurl}}/api/subway/subway_router/getCellLine",
+            data: para,
+            type: "get",
+            success: function (data) {
+                var str = JSON.stringify(data);
+                cellLineData = JSON.parse(str);
+                allCelData=JSON.parse(str);
+                cb(data);
+            }
+        });
+    }
+
+    /**
+     * 通过数据调用所有绘图方法，散点图、雷达图、四个折线图
+     * @param data
+     */
+    function dataFormateDraw(data) {
+        var resu=data.site.data;
+
+        drawHttpRadar([
+            8*Number(resu.HTTP_DL_RATE)/1048576,
+            Number(resu.HTTP_RESP_SUCC_RATE)*10,
+            Number(resu.HTTP_TOTAL_FLOW)/(Number(resu.HTTP_DL_RATE)*86400)*100,
+            100*Number(resu.HTTP_TOTAL_USER_CNT)/2880]);
+
+
+        drawGeneralRadar([80*Number(resu.GENERAL_DL_RATE)/1048576,
+            Number(resu.GENERAL_TOTAL_FLOW)/(Number(resu.GENERAL_DL_RATE)*86400)*30,
+            1000*Number(resu.GENERAL_TOTAL_USER_CNT)/2880]);
+
+        quotaDesign("container-speed1",Number((8*Number(resu.HTTP_DL_RATE)/(1024*1024)).toFixed(5)),'http下载速率');
+        quotaDesign("container-speed2",Number((8*Number(resu.GENERAL_DL_RATE)/(1024*1024)).toFixed(5)),'其他下载速率');
+
+        $("#HTTP_DL_RATE").text(Number((8*Number(resu.HTTP_DL_RATE)/(1024*1024)).toFixed(2)));
+        $("#HTTP_RESP_SUCC_RATE").text((Number(resu.HTTP_RESP_SUCC_RATE)*100).toFixed(2));
+        $("#HTTP_TOTAL_FLOW").text((Number(resu.HTTP_TOTAL_FLOW)/(1024*1024)).toFixed(2));
+        $("#HTTP_TOTAL_USER_CNT").text(resu.HTTP_TOTAL_USER_CNT);
+
+        $("#GENERAL_DL_RATE").text((8*Number(resu.GENERAL_DL_RATE)/(1024*1024)).toFixed(3));
+        $("#GENERAL_TOTAL_FLOW").text((Number(resu.GENERAL_TOTAL_FLOW)/(1024*1024)).toFixed(2));
+        $("#GENERAL_TOTAL_USER_CNT").text(resu.GENERAL_TOTAL_USER_CNT);
+
+        var ConnRateColor=[
+            [0.3, '#bf1710'],
+            [0.8, '#df8311'],
+            [0.9, '#29df0f']
+        ];
+
+        var DropRate=[
+            [0,'#29df0f'],
+            [0.1, '#dfd80e'],
+            [0.5, '#df8311'],
+            [0.9, '#bf1710']
+        ];
+        draw2G4GPie("container-2G-1",ConnRateColor,Number(Number(100*Number(resu.GSM_WL_2G__CONN_RATE)).toFixed(2)),'2G接通率');
+        draw2G4GPie("container-2G-2",DropRate,Number(Number(100*Number(resu.GSM_WL_2G_DROP_RATE)).toFixed(2)),'2G掉线率');
+
+        draw2G4GPie("container-4G-1",ConnRateColor,Number(Number(100*Number(resu.LTE_WL_4G_CONN_RATE)).toFixed(2)),'4G接通率');
+        draw2G4GPie("container-4G-2",DropRate,Number(Number(100*Number(resu.LTE_WL_4G_DROP_RATE)).toFixed(2)),'4G掉线率');
+    }
+
+    /**
+     * 用于切换不同指标：流量，用户数，响应成功率，下载速率。
+     * @param quotaType
+     * @param assemType
+     */
+
+    function switchQuota(quotaType) {
+        var title="";
+        var data=null;
+        var describe="";
+        var unit="";
+
+        var title2="";
+        var data2=null;
+        var describe2="";
+        switch(quotaType){
+            case 'dl_rate':{
+                title="(Kbps)本日该站点http下载速率趋势图";
+                title2="(Kbps)本日该站点小区下http下载速率趋势图";
+                data=allDate.line.data.HTTP_DL_RATE_List;
+                data2=cellLineData.suitLineData.HTTP_DL_RATE;
+                describe="(单位:Kbps)该站点下载速率在";
+                describe2="(单位:Kbps)下载速率在";
+                unit="Kbps";
+                currNetSelect='dl_rate';
+                break;
+            }
+            case 'total_flow':{
+                title="(MB)本日该站点总流量趋势图";
+                title2="(MB)本日该站点小区下总流量趋势图";
+                data=allDate.line.data.HTTP_TOTAL_FLOW_List;
+                data2=cellLineData.suitLineData.HTTP_TOTAL_FLOW;
+                describe="(单位:MB)该站点总流量在";
+                describe2="(单位:MB)总流量在";
+                unit="MB";
+                currNetSelect='total_flow';
+                break;
+            }
+            case 'total_user_cnt':{
+                title="(人)本日该站点总用户数趋势图";
+                title2="(人)本日该站点小区下用户数趋势图";
+                data=allDate.line.data.HTTP_TOTAL_USER_CNT_List;
+                data2=cellLineData.suitLineData.HTTP_TOTAL_USER_CNT;
+                describe="(单位：人)该站点总用户数在";
+                describe2="(单位：人)总用户数在";
+                unit="人";
+                currNetSelect='total_user_cnt';
+                break;
+            }
+            case 'http_resp_succ_rate':{
+                title="本日该站点响应成功率趋势图";
+                title2="本日该站点小区下响应成功率趋势图";
+                data=allDate.line.data.HTTP_RESP_SUCC_RATE_List;
+                data2=cellLineData.suitLineData.HTTP_RESP_SUCC_RATE;
+                describe="该站点响应成功率在";
+                describe2="响应成功率在";
+                unit="%";
+                currNetSelect='http_resp_succ_rate';
+                break;
+            }
+            default :{
+                return null;
+            }
+        }
+
+        var max=Math.max.apply(null,data);
+        for(var i in data){
+            if(Number(data[i])==max)
+                describe=describe+allDate.line.data.TimeList[i];
+        }
+        describe=describe+'点时达到最大值。';
+        drawLine(title,allDate.line.data.TimeList,'canvasDivWeek1',unit,data,describe);
+
+
+
+        var max2=0;
+        var maxCell="";
+        var maxTime="";
+        for(var i in data2){
+            var currMax=Math.max.apply(null,data2[i].value);
+            if(currMax>max2){
+                max2=currMax;
+                maxCell=data2[i].name;
+                for(var j in data2[i].value){
+                    if(data2[i].value[j]==currMax)
+                        maxTime=cellLineData.label[j];
+                }
+            }
+        }
+        describe2=maxCell+"小区"+describe2+maxTime+'点时达到最大值。';
+        drawCellLine(title2,cellLineData.label,'canvasDivDay1',data2,describe2,unit,max2);
+
+    }
+
+
+</script>
+
+
+<!--画图方法定义-->
+<script>
+
+
+    /**
+     * 折线图绘制方法定义
+     * @param title
+     * @param labels
+     * @param id
+     * @param LineColor
+     */
+    function drawLine(title,labels,id,unit,flow,describe) {
+
+
+        var data = [
+            {
+                name: unit,
+                value: flow,
+                color: '#2d61cf',
+                line_width: 2
+            }
+        ];
+
+        //var labels = ["12-01","12-02","12-03","12-04","12-05","12-06"];
+
+        var line = new iChart.LineBasic2D({
+            render: id,
+            data: data,
+            animation: true,
+            align: 'center',
+            title: title,
+            subtitle: describe,
+            width: 550,
+            height: 400,
+            sub_option: {
+                smooth: true,//平滑曲线
+                point_size: 10
+            },
+            tip:{
+                enable:true,
+                shadow:true,
+                listeners:{
+                    //tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
+                    parseText:function(tip,name,value,text,i){
+                        return "<span style='color:#005268;font-size:12px;'>"+labels[i]+":00数据量为:<br/>"+
+                                "</span><span style='color:#005268;font-size:20px;'>"+value+name+"</span>";
+                    }
+                }
+            },
+            legend: {
+                enable: false
+            },
+            crosshair: {
+                enable: true,
+                line_color: '#62bce9'
+            },
+            coordinate: {
+                width: 450,
+                valid_width: 500,
+                height: 260,
+                axis: {
+                    color: '#9f9f9f',
+                    width: [0, 0, 2, 2]
+                },
+                grids: {
+                    vertical: {
+                        way: 'share_alike',
+                        value: 12
+                    }
+                },
+                scale: [{
+                    position: 'left',
+                    start_scale: 0,
+                    end_scale:Math.max.apply(null,flow),
+                    scale_space: (Math.max.apply(null,flow)-(Math.max.apply(null,flow)%5))/5,
+                    scale_size: 2,
+                    scale_color: '#9f9f9f'
+                }, {
+                    position: 'bottom',
+                    labels: labels
+                }]
+            }
+        });
+        //开始画图
+        line.draw();
+    }
+
+    function drawCellLine(title, labels, id,data,describe,unit,max) {
+
+        $('#cellList').combobox('reload','{{projcfg.appurl}}/api/subway/subway_router/getCell?site='+currSite);
+        //$('#cellList').combobox('setValues',comboboxList);
+        var line = new iChart.LineBasic2D({
+            render: id,
+            data: data,
+            animation: true,
+            align: 'center',
+            title: title,
+            subtitle: describe,
+            width: 550,
+            height: 400,
+            sub_option: {
+                smooth: true,//平滑曲线
+                point_size: 10,
+                label:false,
+                point_hollow : false
+            },
+
+            tipMocker: function (tips, i) {
+                var s = "<span style='color:#005268;font-size:12px;'>" + labels[i] + ":00点:</span><br>";
+                for (var j = 0; j < tips.length; j++) {
+                   var cc=tips[j].split(' ');
+                    s = s +"<span style='color:rgba(9,86,136,0.84);font-size:15px;'>"+cc[0]+"</span>:<span style='color:#005268;font-size:15px;font-weight:400;'>"+cc[1]+unit+"</span><br>";
+                }
+                return s;
+            },
+            tip:{
+                enable:true,
+                shadow:true
+
+            },
+            legend: {
+                enable: false
+            },
+            crosshair: {
+                enable: true,
+                line_color: '#62bce9'
+            },
+            coordinate: {
+                width: 450,
+                valid_width: 500,
+                height: 260,
+                axis: {
+                    color: '#9f9f9f',
+                    width: [0, 0, 2, 2]
+                },
+                grids: {
+                    vertical: {
+                        way: 'share_alike',
+                        value: 12
+                    }
+                },
+                scale: [{
+                    position: 'left',
+                    start_scale: 0,
+                    end_scale:max,
+                    scale_space: (max-max%5)/5,
+                    scale_size: 2,
+                    scale_color: '#9f9f9f'
+                }, {
+                    position: 'bottom',
+                    labels: labels
+                }]
+            }
+        });
+        //开始画图
+        line.draw();
+    }
+
+</script>
+<!--数据表格绘制-->
+
+<style>
+    td{vertical-align:middle;}
+</style>
+<script>
+    function drawSiteTable(para) {
+
+
+        //数据表格加载
+        $('#siteInfoTable').datagrid({
+            url: "{{projcfg.appurl}}/api/subway/subway_router/siteInfoList",
+            method: 'get',
+            queryParams: para,
+            title: '站点信息表格',
+            rownumbers: true,
+            autoRowHeight: true,
+            rowStyler: function(index,row){
+
+                    return 'vertical-align:middle;';
+
+            },
+            fitColumns: true,
+            resizable:true,
+            fixed:true,
+            border: true,
+            height: 500,
+            width: 1130,
+            singleSelect: true,
+            columns: [[
+                {
+                    field: '_id', checkbox: true, align: 'center', fixed: true, rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }
+                },
+                {"field": "TIME_ID", "title": "时间",align:'center',fixed:true, rowspan: 2,
+                    formatter: function (value, rowData, rowIndex) {
+                        return value.substr(0,4) + '年' + value.substr(4,2) + '月' + value.substr(6,2) + '日' + value.substr(8,2) + '时';
+                    },
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }
+                },
+                {"field": "AREA_NAME", "title": "地区",align:'center',fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }},
+                {"field": "SUBWAY_NAME", "title": "线路名称",fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }},
+                {"field": "STATION_NAME", "title": "站点名称",fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }},
+
+                {"title": "HTTP网络",colspan: 5},
+                {"title": "其他网络", colspan: 4},
+                {"title": "2G4G数据", colspan: 4}
+
+
+            ], [
+                {"field": "HTTP_TOTAL_USER_CNT", "title": "总用户数", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                        return value;
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "HTTP_TOTAL_FLOW", "title": "总流量", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return flowFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "HTTP_RESP_SUCC_RATE", "title": "响应成功率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }
+                    },
+                {"field": "HTTP_DL_RATE", "title": "下载速率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return rateFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "HTTP_COVER_ID", "title": "覆盖区域", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return codeToCove(value,"");
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+
+
+                {"field": "GENERAL_TOTAL_USER_CNT", "title": "总用户数", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return value;
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GENERAL_TOTAL_FLOW", "title": "总流量", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return flowFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GENERAL_DL_RATE", "title": "下载速率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return rateFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GENERAL_COVER_ID", "title": "覆盖区域", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return codeToCove(value,"");
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+
+                {"field": "GSM_WL_2G__CONN_RATE", "title": "2G接通率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GSM_WL_2G_DROP_RATE", "title": "2G掉线率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "LTE_WL_4G_CONN_RATE", "title": "4G接通率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "LTE_WL_4G_DROP_RATE", "title": "4G掉线率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }}
+            ]],
+            onClickRow: function (rowIndex, rowData) {
+
+            },
+            onBeforeLoad: function (param) {
+
+            },
+            onLoadSuccess: function (json) {
+
+            },
+            onLoadError: function () {
+                msgError('加载数据出现时发生错误,请稍候重试...');
+            },
+            pagination: true,
+            loadMsg: '正在加载...'
+        });
+        var role_code = '{{currentUserRole.role_code}}';
+        var org_code = '{{currentUser.user_org.org_code}}';
+        var login_account = '{{currentUser.login_account}}';
+
+    }
+
+    function flowFormatter(value) {
+        return (Number(value)/(1024*1024)).toFixed(2);
+    }
+    function percentageFormatter(value) {
+       return  (Number(value)*100).toFixed(2)+"%";
+    }
+    function rateFormatter(value) {
+        return (8*Number(value)/1024).toFixed(2)+"Kbps";
+    }
+
+    function codeToCove(num,s) {
+        num=Number(num);
+        if (num >= 8) {
+            s = s + "路面段;";
+            return codeToCove(num - 8, s);
+        }
+        else if (num >= 4 && num < 8) {
+            s = s + "隧道;";
+            return codeToCove(num - 4, s);
+        }
+        else if (num >= 2 && num < 4) {
+            s = s + "站厅;";
+            return codeToCove(num - 2, s);
+        }
+        else if (num >= 1 && num < 2) {
+            s = s + "站台;";
+            return codeToCove(num - 1, s);
+        }
+        else if (num == 0)
+            return s;
+        // 1.站台	1
+        // 2.站厅	2
+        // 3.隧道	4
+        // 4.路面段	8
+    }
+    function drawAreaTable(para) {
+        //数据表格加载
+        $('#cellInfoTable').datagrid({
+            url: "{{projcfg.appurl}}/api/subway/subway_router/siteInfoList",
+            method: 'post',
+            queryParams: para,
+            title: '小区信息表格',
+            rownumbers: true,
+            striped: true,
+            autoRowHeight: false,
+            fitColumns: false,
+            border: true,
+            multiSort: true,
+            height: 500,
+            width: 1130,
+            singleSelect: true,
+            selectOnCheck: false,
+            columns: [[
+                {
+                    field: '_id', checkbox: true, align: 'center', fixed: true, rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }
+                },
+                {"field": "TIME_ID", "title": "时间",align:'center',fixed:true, rowspan: 2,
+                    formatter: function (value, rowData, rowIndex) {
+                        return value.substr(0,4) + '年' + value.substr(4,2) + '月' + value.substr(6,2) + '日' + value.substr(8,2) + '时';
+                    },
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }
+                },
+                {"field": "AREA_NAME", "title": "地区",align:'center',fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    }},
+                {"field": "SUBWAY_NAME", "title": "线路名称",fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    },formatter:function (value) {
+                        if(value==undefined||value==''||value==null)
+                            return '一号线'
+                        else
+                            return value;
+                    }},
+                {"field": "cell_name", "title": "小区名称",fixed:true,rowspan: 2,
+                    styler: function (value, row, index) {
+                        return 'vertical-align:middle;';
+                    },formatter:function (value,row,rowIndex) {
+                        if (row.HTTP_CELL_NAME != undefined)
+                            return row.HTTP_CELL_NAME;
+                        else if (row.GENERAL_CELL_NAME != undefined)
+                            return row.GENERAL_CELL_NAME;
+                        else if (row.CELL_NAME_2G != undefined)
+                            return row.CELL_NAME_2G;
+                        else if (row.CELL_NAME_4G != undefined)
+                            return row.CELL_NAME_4G;
+                        else
+                            return '';
+                    }},
+
+                {"title": "HTTP网络",colspan: 4},
+                {"title": "其他网络", colspan: 3},
+                {"title": "2G4G数据", colspan: 4}
+
+
+            ], [
+                {"field": "HTTP_TOTAL_USER_CNT", "title": "总用户数", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return value;
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "HTTP_TOTAL_FLOW", "title": "总流量", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return flowFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "HTTP_RESP_SUCC_RATE", "title": "响应成功率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }
+                },
+                {"field": "HTTP_DL_RATE", "title": "下载速率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return rateFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+
+
+
+                {"field": "GENERAL_TOTAL_USER_CNT", "title": "总用户数", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return value;
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GENERAL_TOTAL_FLOW", "title": "总流量", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return flowFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GENERAL_HTTP_RESP_SUCC_RATE", "title": "响应成功率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+
+                {"field": "GSM_WL_2G_CONN_RATE", "title": "2G接通率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "GSM_WL_2G_DROP_RATE", "title": "2G掉线率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "LTE_WL_4G_CONN_RATE", "title": "4G接通率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }},
+                {"field": "LTE_WL_4G_DROP_RATE", "title": "4G掉线率", halign: 'center',formatter:function (value) {
+                        if(value==""||value==undefined||value==null)
+                            return "";
+                        else
+                            return percentageFormatter(value);
+                    },styler:function(value){
+                        if (value==""||value==undefined||value==null)
+                            return 'background-color:#878388;' +
+                                    'color:#878388;';
+                        else
+                            return 'vertical-align:middle;';
+
+                    }}
+            ]],
+            onClickRow: function (rowIndex, rowData) {
+
+            },
+            onBeforeLoad: function (param) {
+
+            },
+            onLoadSuccess: function (json) {
+
+            },
+            onLoadError: function () {
+                msgError('加载数据出现时发生错误,请稍候重试...');
+            },
+            pagination: true,
+            loadMsg: '正在加载...'
+
+        });
+    }
+
+</script>
+<script>
+
+    function drawHttpRadar(data) {
+        $('#httpQuato').highcharts({
+            chart: {
+                polar: true,
+                type: 'line',
+                margin: [0, 0, 0, 0]
+
+            },
+            title: {
+                style:{ "color":"#5b5b5b", "fontSize": "14px" },
+                text: 'http网络情况',
+                x: -80,
+                y:10
+            },
+            pane: {
+                size: '75%'
+            },
+            xAxis: {
+                categories: ['下载速率','响应成功率','总流量','用户数'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0,
+                max:10,
+                labels: {
+                    enabled: false
+                }
+            },
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}"></b><br/>'
+            },
+            series: [{
+                name: 'http指标',
+                data: data,
+                pointPlacement: 'on',
+                showInLegend: false,
+                color:"#1815cf"
+            }],
+            credits: {
+                text: '',
+                href: ''
+            },
+        });
+    };
+
+
+
+    function drawGeneralRadar (data) {
+        $('#generalQuato').highcharts({
+            chart: {
+                polar: true,
+                type: 'line',
+                margin: [20, 0, 0, 0]
+
+            },
+            title: {
+                style:{ "color": "#7a7a7a", "fontSize": "14px" },
+                text:"其他网络情况",
+                x: -80,
+                y:10
+            },
+            pane: {
+                size: '80%'
+            },
+            xAxis: {
+                categories: ['下载速率','总流量','用户数'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0,
+                labels: {
+                    enabled: false
+                }
+            },
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}"></b><br/>'
+            },
+            series: [{
+                name: 'http指标',
+                data: data,
+                pointPlacement: 'on',
+                showInLegend: false,
+                color:"#2d61cf"
+            }],
+            credits: {
+                text: '',
+                href: ''
+            },
+        });
+    }
+
+
+
+
+</script>
+
+
+<script>
+    function quotaDesign(id,data,unit) {
+        $('#'+id).highcharts({
+            chart: {
+                type: 'solidgauge'
+            },
+            title: null,
+            pane: {
+                center: ['50%', '85%'],
+                size: '120%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#f7f7f7',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+            tooltip: {
+                enabled: false
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                title: {
+                    text: unit,
+                    y:18
+                },
+                stops: [
+                    [0.3, '#bf241d'], // green
+                    [0.5, '#dfad25'], // yellow
+                    [0.8, '#15df53'] // red
+                ],
+                lineWidth: 0,
+                minorTickInterval: null,
+                tickPixelInterval: 400,
+                tickWidth: 0,
+                labels: {
+                    y: 16
+                }
+            },
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: unit,
+                data: [data],
+                dataLabels: {
+                    format: '<div style="text-align:center;"><span style="font-size:25px;color:' +
+                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                    '<span style="font-size:12px;color:silver">Mbps</span></div>',
+                    y:18
+                },
+                tooltip: {
+                    valueSuffix: 'Mbps'
+                }
+            }]
+        });
+    }
+
+
+    function draw2G4GPie(id,color,data,title) {
+        $('#'+id).highcharts({
+            chart: {
+                type: 'solidgauge'
+            },
+            title: null,
+            pane: {
+                center: ['50%', '50%'],
+                size: '100%',
+                startAngle: -90,
+                endAngle:270,
+                background: {
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+            tooltip: {
+                enabled: false
+            },
+            yAxis: {
+                stops: color,
+                lineWidth: 0,
+                minorTickInterval: null,
+                tickPixelInterval: 400,
+                tickWidth: 0,
+                title: {
+                    text:title,
+                    y: 15
+                },
+                labels: {
+                    y: 16
+                },
+                min: 0,
+                max: 100,
+                showLastLabel:false,
+                showFirstLabel:false
+            },
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: title,
+                data: [data],
+                showInLegend:false,
+                dataLabels: {
+                    format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}%</span>',
+                    y:-20
+                }
+            }]
+        });
+    }
+
+
+    laydate.render({
+        elem: '#queryDate',
+        type: 'datetime',
+        theme: '#1640b6',
+        calendar: true,
+        min: '2018-1-20',
+        max: currentDate.getFullYear()+"-"+(currentDate.getMonth()+1)+'-'+(currentDate.getDate()-1),
+        format: 'yyyy-MM-dd HH:mm',
+        done: function(value, date, endDate){
+
+        }
+    });
+
+    function dayTimeTransf(time) {
+        if(typeof time=='object'){
+            var timeStamp=time.getFullYear() + "" +
+                    (time.getMonth() < 9 ? '0' + (time.getMonth() + 1) : (time.getMonth() + 1)) + "" +
+                    (time.getDate() < 10 ? '0' + time.getDate() : time.getDate())+""+
+                    (time.getHours()<10 ? '0'+time.getHours():time.getHours());
+            return timeStamp;
+        }else{
+            var date=time.substring(0,4)+"-"+time.substring(4,6)+"-"+time.substring(6,8);
+            return date;
+        }
+    }
+
+
+
+
+</script>
+
+
+
+<script>
+
+    /*
+  Highcharts JS v6.0.4 (2017-12-15)
+
+  (c) 2009-2017 Torstein Honsi
+
+  License: www.highcharts.com/license
+ */
+    (function(a){"object"===typeof module&&module.exports?module.exports=a:a(Highcharts)})(function(a){a.createElement("link",{href:"https://fonts.googleapis.com/css?family\x3dDosis:400,600",rel:"stylesheet",type:"text/css"},null,document.getElementsByTagName("head")[0]);a.theme={colors:"#7cb5ec #f7a35c #90ee7e #7798BF #aaeeee #ff0066 #eeaaee #55BF3B #DF5353 #7798BF #aaeeee".split(" "),chart:{backgroundColor:null,style:{fontFamily:"Dosis, sans-serif"}},title:{style:{fontSize:"16px",fontWeight:"bold",
+                textTransform:"uppercase"}},tooltip:{borderWidth:0,backgroundColor:"rgba(219,219,216,0.8)",shadow:!1},legend:{itemStyle:{fontWeight:"bold",fontSize:"13px"}},xAxis:{gridLineWidth:1,labels:{style:{fontSize:"12px"}}},yAxis:{minorTickInterval:"auto",title:{style:{textTransform:"uppercase"}},labels:{style:{fontSize:"12px"}}},plotOptions:{candlestick:{lineColor:"#404048"}},background2:"#F0F0EA"};a.setOptions(a.theme)});
+</script>
+
+
+
+
+
+
+<script>
+
+    /**
+     * 雷达图绘制方法定义
+     * @param data
+     */
+    /*function drawRadar(data) {
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            radar: [
+                {
+                    indicator: [
+                        {text: '流量', max: 90},
+                        {text: '用户数', max: 90},
+                        {text: '响应成功率', max: 90},
+                        {text: '下载速率', max: 90}
+                    ],
+                    center: ['50%', '50%'],
+                    radius: 90,
+                    startAngle: 90,
+                    splitNumber: 4,
+                    shape: 'circle',
+                    name: {
+                        formatter: '【{value}】',
+                        textStyle: {
+                            color: '#1dc4c8'
+                        }
+                    },
+                    splitArea: {
+                        areaStyle: {
+                            color: ['#0400ff',
+                                    '#2c24ff',
+                                    '#403fff',
+                                    '#5450ff',
+                                    '#7880ff'],
+                            shadowColor: 'rgba(0, 0, 0, 0.3)',
+                            shadowBlur: 10
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255,0.5)'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '雷达图',
+                    type: 'radar',
+                    itemStyle: {
+                        emphasis: {
+                            // color: 各异,
+                            lineStyle: {
+                                width: 3
+                            }
+                        }
+                    },
+                    data: [
+                        {
+                            value: data,
+                            name: '图二',
+                            areaStyle: {
+                                normal: {
+                                    color: 'rgba(255, 255, 255, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+        myChart.setOption(option);
+        $(window).resize(function () {//这是能够让图表自适应的代码
+            myChart.resize();
+        });
+
+    }*/
+
+
+    /**
+     * 折线图绘制方法定义
+     * @param data
+     */
+    /*function drawScatter(data) {
+        var myChart = echarts.init(document.getElementById('ScatterPlot'));
+        myChart.showLoading();
+        var itemStyle = {
+            normal: {
+                opacity: 0.8,
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        };
+
+        var sizeFunction = function (x) {
+            var y = Math.sqrt(x / 9e7) + 0.1;
+            return 75 * y;
+        };
+        // Schema:
+        var schema = [
+            {name: 'Income', index: 0, text: '流量', unit: 'MB'},
+            {name: 'LifeExpectancy', index: 1, text: '人数', unit: '人'},
+            {name: 'Population', index: 2, text: '总人口', unit: ''},
+            {name: 'Country', index: 3, text: '站点', unit: ''}
+        ];
+
+        option = {
+            baseOption: {
+                timeline: {
+                    axisType: 'category',
+                    orient: 'vertical',
+                    autoPlay: true,
+                    inverse: true,
+                    playInterval: 1000,
+                    left: null,
+                    right: 0,
+                    top: 20,
+                    bottom: 20,
+                    width: 55,
+                    height: null,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#999'
+                            }
+                        },
+                        emphasis: {
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    symbol: 'none',
+                    lineStyle: {
+                        color: '#555'
+                    },
+                    checkpointStyle: {
+                        color: '#bbb',
+                        borderColor: '#777',
+                        borderWidth: 2
+                    },
+                    controlStyle: {
+                        showNextBtn: false,
+                        showPrevBtn: false,
+                        normal: {
+                            color: '#666',
+                            borderColor: '#666'
+                        },
+                        emphasis: {
+                            color: '#aaa',
+                            borderColor: '#aaa'
+                        }
+                    },
+                    data: []
+                },
+
+                title: [{
+                    text: data.timeline[0],
+                    textAlign: 'center',
+                    left: '63%',
+                    top: '5%',
+                    textStyle: {
+                        fontSize: 100,
+                        color: '#d8d8df'
+                    }
+                }, {
+                    text: '该站点当日热度',
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        color: '#080808',
+                        fontWeight: 'normal',
+                        fontSize: 20
+                    }
+                }],
+                tooltip: {
+                    padding: 5,
+                    backgroundColor: '#080808',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    formatter: function (obj) {
+                        var value = obj.value;
+                        return schema[3].text + '：' + value[3] + '<br>'
+                                + schema[1].text + '：' + value[1] + schema[1].unit + '<br>'
+                                + schema[0].text + '：' + value[0] + schema[0].unit + '<br>';
+                    }
+                },
+                grid: {
+                    top: 100,
+                    containLabel: true,
+                    left: 30,
+                    right: '110'
+                },
+                xAxis: {
+                    type: 'log',
+                    name: '流量',
+                    max: 1024 * 1000,
+                    min: 10,
+                    nameGap: 1,
+                    nameLocation: 'middle',
+                    nameTextStyle: {
+                        fontSize: 18
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#080808'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value} MB'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '人数',
+                    max: 1000,
+                    nameTextStyle: {
+                        color: '#080808',
+                        fontSize: 18
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#080808'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: '{value} 人'
+                    }
+                },
+                visualMap: [
+                    {
+                        show: false,
+                        dimension: 3,
+                        categories: data.counties,
+                        calculable: true,
+                        precision: 0.1,
+                        textGap: 30,
+                        textStyle: {
+                            color: '#ccc'
+                        },
+                        inRange: {
+                            color: (function () {
+                                var colors = ['#54d341',
+                                    '#40ade8',
+                                    '#9e410b',
+                                    '#85b4c8',
+                                    '#131de8',
+                                    '#eb9922',
+                                    '#e5283e',
+                                    '#9c6ff0',
+                                    '#8d13a8',
+                                    '#bdba1f'];
+                                return colors.concat(colors);
+                            })()
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        type: 'scatter',
+                        itemStyle: itemStyle,
+                        data: data.series[0],
+                        symbolSize: function (val) {
+                            return sizeFunction(val[2]);
+                        }
+                    }
+                ],
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'quinticInOut'
+            },
+            options: []
+        };
+
+        for (var n = 0; n < data.timeline.length; n++) {
+            option.baseOption.timeline.data.push(data.timeline[n]);
+            option.options.push({
+                title: {
+                    show: true,
+                    'text': data.timeline[n] + ''
+                },
+                series: {
+                    name: data.timeline[n],
+                    type: 'scatter',
+                    itemStyle: itemStyle,
+                    data: data.series[n],
+                    symbolSize: function (val) {
+
+                        return sizeFunction(val[2]);
+                    }
+                }
+            });
+        }
+
+        myChart.setOption(option);
+        myChart.hideLoading();
+
+    }*/
+</script>
+<!--<div class="row">
+    <div class="col-md-12">
+        <div class="easyui-tabs" style="width: 600px;height:600px;padding:10px"
+             data-options="tabWidth:550,tabHeight:40,fit:true,border:true">
+            <div title="图表">
+                <div class="row" style="padding:10px">
+                    <div class="buttons-preview" style="margin-left: 20px;margin-bottom: 20px;margin-top: 20px">
+                        <button class="btn shiny btn-azure " type="button"
+                                onclick="switchQuota                          ('total_flow','cell')">
+                            流量
+                        </button>
+                        <button class="btn shiny btn-sky " type="button" onclick="switchQuota('total_user_cnt','cell')">
+                            用户数
+                        </button>
+                        <button class="btn shiny btn-blue " type="button"
+                                onclick="switchQuota('http_resp_succ_rate','cell')">页面响应成功率
+                        </button>
+                        <button class="btn shiny btn-palegreen  " type="button" onclick="switchQuota('dl_rate','cell')">
+                            下载速率
+                        </button>
+                        <input class="easyui-combobox" value="小区选择" style="width: 130px;                        height:38px;" name="cell_area1"
+                               id="cell_area1"
+                               data-options='data:[{id:"小区一",text:"小区一"},
+                               {id:"小区二",text:"小区二"},
+                               {id:"小区三",text:"小区三"},
+                               {id:"小区四",text:"小区四"}],
+                                valueField: "id",
+                                textField: "text",
+                                panelWidth: 130,
+                                panelHeight: "auto",
+                                formatter: formatItem'>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="canvasDivWeek2"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="canvasDivDay2"></div>
+                    </div>
+                </div>
+            </div>
+            <div title="表格" style="padding:10px">
+                <input class="easyui-combobox" value="小区选择" style="width: 130px;height:34px;" name="cell_area2"
+                       id="cell_area2"
+                       data-options='data:[{id:"小区一",text:"小区一"},
+                               {id:"小区二",text:"小区二"},
+                               {id:"小区三",text:"小区三"},
+                               {id:"小区四",text:"小区四"}],
+                                valueField: "id",
+                                textField: "text",
+                                panelWidth: 130,
+                                panelHeight: "auto",
+                                formatter: formatItem'>
+
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+
+
+
+
+
+
+
